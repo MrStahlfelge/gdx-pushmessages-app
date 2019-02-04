@@ -4,6 +4,8 @@
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 
 	<inherits name='GdxPushMsgsApp' />
+	<inherits name="de.golfgl.gdxpushmessages.gdx_pushmsgs_gwt" />
+
 	<entry-point class='de.golfgl.gdxpushmsgsapp.client.HtmlLauncher' />
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
 	<set-configuration-property name="gdx.assetpath" value="../android/assets" />

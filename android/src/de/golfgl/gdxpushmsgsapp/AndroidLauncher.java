@@ -5,6 +5,8 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
+import de.golfgl.gdxpushmessages.FcmMessageProvider;
+
 public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -12,6 +14,7 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
 		GdxPushMsgsApp game = new GdxPushMsgsApp();
+		game.pushMessageProvider = new FcmMessageProvider();
 		initialize(game, config);
 	}
 }

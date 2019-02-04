@@ -7,13 +7,20 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
-public class GdxPushMsgsApp extends ApplicationAdapter {
+import de.golfgl.gdxpushmessages.IPushMessageListener;
+import de.golfgl.gdxpushmessages.IPushMessageProvider;
+
+public class GdxPushMsgsApp extends ApplicationAdapter implements IPushMessageListener {
+	IPushMessageProvider pushMessageProvider;
 	Skin skin;
 	Stage stage;
 	private TextureAtlas atlas;
+	private Label tokenLabel;
 
 	@Override
 	public void create() {
@@ -23,10 +30,24 @@ public class GdxPushMsgsApp extends ApplicationAdapter {
 		prepareSkin();
 
 		prepareUI();
+
+		if (pushMessageProvider != null)
+			pushMessageProvider.initService(this);
+		else
+			tokenLabel.setText("(no push message provider)");
 	}
 
 	private void prepareUI() {
+		Table mainTable = new Table();
+		tokenLabel = new Label("(no token yet)", skin);
 
+		mainTable.setFillParent(true);
+
+		mainTable.row();
+		mainTable.add(new Label("Token:", skin)).padRight(10);
+		mainTable.add(tokenLabel);
+
+		stage.addActor(mainTable);
 	}
 
 
@@ -59,6 +80,14 @@ public class GdxPushMsgsApp extends ApplicationAdapter {
 		stage.dispose();
 		skin.dispose();
 		atlas.dispose();
+	}
+
+	@Override
+	public void onRegistrationTokenRetrieved(String token) {
+		// a new token was retrieved
+		if (token.length() > 30)
+			token = token.substring(1, 30) + "...";
+		tokenLabel.setText(token);
 	}
 
 	public class MyDialog extends Dialog {
