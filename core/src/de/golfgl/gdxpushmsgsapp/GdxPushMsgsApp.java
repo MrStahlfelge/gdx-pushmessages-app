@@ -83,11 +83,31 @@ public class GdxPushMsgsApp extends ApplicationAdapter implements IPushMessageLi
 	}
 
 	@Override
-	public void onRegistrationTokenRetrieved(String token) {
+	public void onRegistrationTokenRetrieved(final String token) {
 		// a new token was retrieved
-		if (token.length() > 30)
-			token = token.substring(1, 30) + "...";
-		tokenLabel.setText(token);
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				String displayToken = token;
+				if (displayToken.length() > 30)
+					displayToken = displayToken.substring(1, 30) + "...";
+				tokenLabel.setText(displayToken);
+			}
+		});
+	}
+
+	@Override
+	public void onPushMessageArrived(final String payload) {
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				MyDialog dialog = new MyDialog("Message arrived");
+				dialog.text("Payload: " + (payload != null ? payload : "(none)"));
+
+				dialog.show(stage);
+
+			}
+		});
 	}
 
 	public class MyDialog extends Dialog {
